@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fase 2</title>
+<link rel="stylesheet" href="css/fase2.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- TOPO -->
+  <div class="topo">
+    <button id="btnAjuda" class="btn-neon">Ajuda</button>
+    <div id="pontuacao">Pontos: <span id="pontos">0</span></div>
+  </div>
+
+  <!-- PERSONAGEM -->
+  <img src="img/zero.png" id="zero">
+
+  <!-- DIÁLOGO -->
+  <div id="dialogo" class="card">
+    <p id="falaZero"></p>
+    <button id="btnContinuar" class="btn-neon">Continuar</button>
+  </div>
+
+  <!-- DESAFIO -->
+  <div id="desafio" class="card oculto">
+    <h3>Digite o código de acesso:</h3>
+
+    <div class="editor-area">
+      <textarea id="codigo" placeholder="Digite o código HTML aqui..."></textarea>
+
+      <div class="colinha">
+        <h4>Colinha HTML</h4>
+        <ul>
+          <li>&lt;html&gt; … &lt;/html&gt;</li>
+          <li>&lt;body&gt; … &lt;/body&gt;</li>
+          <li>&lt;h1&gt;Título&lt;/h1&gt;</li>
+          <li>&lt;p&gt;Texto&lt;/p&gt;</li>
+        </ul>
+      </div>
+    </div>
+
+    <button id="btnValidar" class="btn-neon">Validar Código</button>
+  </div>
+
+  <div id="mensagemAcerto" class="sucesso oculto">
+    ✅ Código correto! Acesso liberado.
+  </div>
+
+  <button id="proximaFase" class="btn-neon oculto">Próxima Fase</button>
+
+</div>
+
+<!-- JANELA DA IA (CRIADA PELO JS) -->
+<!-- TRANSIÇÃO -->
+<div id="transicao"></div>
+
+<script src="js/save.js"></script>
+<script src="js/fase2.js"></script>
+</body>
+</html>

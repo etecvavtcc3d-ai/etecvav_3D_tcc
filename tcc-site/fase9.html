@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Quiz HTML & CSS</title>
+
+<style>
+/* ===== BACKGROUND ===== */
+body {
+  margin: 0;
+  overflow: hidden;
+  background: url("/img/rua.png") no-repeat center center fixed;
+  background-size: cover;
+  font-family: monospace;
+}
+
+/* ===== PERGUNTA ===== */
+#pergunta {
+  position: absolute;
+  top: 15px;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+  font-size: 20px;
+  text-shadow: 2px 2px 5px #000;
+}
+
+/* ===== PERSONAGEM ZERO ===== */
+#zero {
+  position: absolute;
+  width: 96px;
+  height: 96px;
+  transition: transform 0.3s, filter 0.3s;
+}
+
+/* ===== PORTAS (AJUSTADAS AO FUNDO) ===== */
+.porta {
+  position: absolute;
+  bottom:70x;   /* 700px para cima */
+  width: 130px;
+  height: 180px;
+  background: rgba(0,0,0,0.7);
+  border: 4px solid #fff;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-family: "Courier New", monospace;
+}
+
+/* move as duas 10px para a direita */
+#portaEsq {
+  left: calc(18% + 10px);
+}
+
+#portaDir {
+  right: calc(18% - 10px);
+}
+
+#portaEsq {
+  left: 23%;
+}
+
+#portaDir {
+  right: 23%;
+}
+
+/* ===== FINAL ===== */
+#final {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  font-size: 28px;
+}
+
+#final button {
+  margin-top: 25px;
+  padding: 12px 30px;
+  font-size: 18px;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+<script src="js/save.js"></script>
+
+<div id="pergunta"></div>
+
+<div id="portaEsq" class="porta"></div>
+<div id="portaDir" class="porta"></div>
+
+<img id="zero" src="/img/zero.png" alt="Personagem Zero">
+
+<div id="final">
+  <div>🎉 PARABÉNS! 🎉</div>
+  <button onclick="proximaFase()">Próxima Fase</button>
+</div>
+
+<script>
+/* ===== QUIZ ===== */
+const perguntas = [
+  { q: "Qual tag cria um parágrafo?", a: "A", A: "<p>", B: "<div>" },
+  { q: "Qual propriedade muda a cor do texto?", a: "B", A: "background", B: "color" },
+  { q: "CSS significa?", a: "A", A: "Cascading Style Sheets", B: "Creative Style System" },
+  { q: "Qual tag cria um link?", a: "B", A: "<link>", B: "<a>" },
+  { q: "Qual propriedade centraliza texto?", a: "A", A: "text-align", B: "align-text" },
+  { q: "Qual unidade é relativa?", a: "B", A: "px", B: "%" },
+  { q: "Qual tag cria uma lista?", a: "A", A: "<ul>", B: "<table>" },
+  { q: "Qual seletor usa # ?", a: "B", A: "classe", B: "id" },
+  { q: "Qual propriedade muda fonte?", a: "A", A: "font-family", B: "text-style" },
+  { q: "HTML é linguagem de?", a: "B", A: "programação", B: "marcação" }
+];
+
+
+let etapa = 0;
+let bloqueado = false;
+
+const zero = document.getElementById("zero");
+const pergunta = document.getElementById("pergunta");
+const portaEsq = document.getElementById("portaEsq");
+const portaDir = document.getElementById("portaDir");
+
+/* ===== POSIÇÃO ===== */
+let x, y;
+const speed = 10;
+
+function resetarZero() {
+  x = window.innerWidth / 2 - 24;
+  y = window.innerHeight - 90;
+  atualizarZero();
+}
+
+function atualizarZero() {
+  zero.style.left = x + "px";
+  zero.style.top = y + "px";
+}
+
+/* ===== CARREGAR ETAPA ===== */
+function carregarEtapa() {
+  if (etapa >= perguntas.length) {
+    document.getElementById("final").style.display = "flex";
+    return;
+  }
+
+  pergunta.innerText = perguntas[etapa].q;
+  portaEsq.innerText = perguntas[etapa].A;
+  portaDir.innerText = perguntas[etapa].B;
+
+  resetarZero();
+}
+
+/* ===== MOVIMENTO ===== */
+document.addEventListener("keydown", e => {
+  if (bloqueado) return;
+  if (e.key === "ArrowLeft") x -= speed;
+  if (e.key === "ArrowRight") x += speed;
+  if (e.key === "ArrowUp") y -= speed;
+  if (e.key === "ArrowDown") y += speed;
+
+  atualizarZero();
+  verificarColisao();
+});
+
+/* ===== COLISÃO ===== */
+function verificarColisao() {
+  const z = zero.getBoundingClientRect();
+  const e = portaEsq.getBoundingClientRect();
+  const d = portaDir.getBoundingClientRect();
+
+  if (colide(z, e)) verificarResposta("A");
+  if (colide(z, d)) verificarResposta("B");
+}
+
+function colide(a, b) {
+  return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+}
+
+function verificarResposta(resposta) {
+  if (bloqueado) return;
+  if (resposta === perguntas[etapa].a) {
+    bloqueado = true;
+    // Efeito de transição ao acertar
+    zero.style.transform = "scale(1.3) rotate(-10deg)";
+    zero.style.filter = "drop-shadow(0 0 24px #00ff88)";
+    setTimeout(() => {
+      zero.style.transform = "";
+      zero.style.filter = "";
+      etapa++;
+      carregarEtapa();
+      bloqueado = false;
+    }, 500);
+  } else {
+    resetarZero();
+  }
+}
+
+/* ===== PRÓXIMA FASE ===== */
+function proximaFase() {
+  window.location.href = "final.html";
+}
+
+carregarEtapa();
+/* ===== SAVE AUTOMÁTICO DA FASE ===== */
+if (window.SaveSystem) {
+    SaveSystem.updateActivePhase(8);
+} else {
+    localStorage.setItem("faseAtual", 8);
+}
+</script>
+
+</body>
+</html>

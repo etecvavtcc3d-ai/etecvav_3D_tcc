@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fase 1 - Estrutura HTML</title>
+<link rel="stylesheet" href="/css/fase1.css">
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- TOPO -->
+<div class="topo">
+
+<div class="zero">
+<img src="../img/zero.png" alt="Zero">
+</div>
+
+<div class="balao">
+<p id="falaZero"></p>
+<button id="btnDialogo">Continuar</button>
+</div>
+
+</div>
+
+
+<!-- DESAFIO -->
+<div id="desafio" class="desafio oculto">
+
+<div class="editor">
+
+<!-- COLINHA -->
+<div class="colinha">
+
+<h3>Colinha HTML</h3>
+
+<pre>
+&lt;html&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Texto&lt;/h1&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre>
+
+</div>
+
+
+<!-- EDITOR -->
+<div class="codigo-area">
+
+<textarea id="codigo" placeholder="Digite seu código aqui..."></textarea>
+
+<button onclick="verificarCodigo()">
+Executar Código
+</button>
+
+</div>
+
+</div>
+
+
+<!-- RESULTADO -->
+<div class="resultado">
+
+<iframe id="preview"></iframe>
+
+</div>
+
+</div>
+
+
+<!-- BOTÃO PRÓXIMA FASE (fora do desafio para garantir que apareça) -->
+<div class="botao-fase">
+<button id="proximaFase" style="display:none;">
+Próxima Fase
+</button>
+</div>
+
+
+</div>
+
+<div id="transicao" class="transicao"></div>
+
+<script src="/js/fase1.js"></script>
+
+</body>
+</html>

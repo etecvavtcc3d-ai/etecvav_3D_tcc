@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Fase 4 - Identidade no Sistema</title>
+<link rel="stylesheet" href="../css/fase4.css">
+</head>
+<body>
+
+<div class="container" id="cenario">
+
+    <!-- ZERO + BALÃO -->
+    <div class="topo">
+        <div class="zero">
+            <img src="../img/zero.png" alt="Zero">
+        </div>
+
+        <div class="balao">
+            <p id="falaZero"></p>
+
+            <div class="botoes-dialogo">
+                <button id="btnVoltar">◀</button>
+                <button id="btnAvancar">▶</button>
+            </div>
+        </div>
+
+        <!-- QUADRO DE EXEMPLO -->
+        <div class="exemplo" id="quadroExemplo"></div>
+    </div>
+
+    <!-- DESAFIO -->
+    <div id="desafio" class="desafio oculto">
+
+        <h2>Missão Final</h2>
+
+        <div class="editor">
+
+            <!-- COLINHA -->
+            <div class="colinha">
+                <h3>Colinha CSS</h3>
+                <pre>
+/* Classe */
+.destaque {
+  background: green;
+}
+
+/* ID */
+#especial {
+  border: 3px solid red;
+}
+                </pre>
+            </div>
+
+            <!-- CÓDIGO -->
+            <div class="codigo-area">
+                <textarea id="codigo" placeholder="Digite seu CSS aqui..."></textarea>
+                <button id="btnValidar">Testar Código</button>
+                <button id="btnAjuda">Ajuda (IA)</button>
+            </div>
+
+            <!-- RESULTADO -->
+            <div class="resultado">
+                <div class="caixa destaque">Grupo</div>
+                <div class="caixa">Normal</div>
+                <div class="caixa" id="especial">Única</div>
+            </div>
+
+        </div>
+
+        <button id="proximaFase" class="oculto">Próxima Fase</button>
+    </div>
+
+</div>
+
+<!-- JANELA IA -->
+<div id="janelaIA" class="janela-ia oculto">
+    <div class="topo-ia" id="topoIA">
+        Assistente IA
+        <span id="fecharIA">X</span>
+    </div>
+    <div id="chatIA" class="chat-ia"></div>
+    <div class="entrada-ia">
+        <input id="inputIA" placeholder="Digite sua dúvida...">
+        <button id="enviarIA">Enviar</button>
+    </div>
+</div>
+
+<div id="transicao" class="transicao"></div>
+
+<script src="js/save.js"></script>
+<script src="../js/fase4.js"></script>
+</body>
+</html>
