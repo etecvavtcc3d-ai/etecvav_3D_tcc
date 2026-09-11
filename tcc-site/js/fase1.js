@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
+    const abertura = document.getElementById("abertura");
+    const falaAbertura = document.getElementById("falaAbertura");
     const falaZero = document.getElementById("falaZero");
     const btnDialogo = document.getElementById("btnDialogo");
     const desafio = document.getElementById("desafio");
@@ -10,8 +12,41 @@ document.addEventListener("DOMContentLoaded", function () {
     const transicao = document.getElementById("transicao");
     
     
+    document.body.classList.add("intro-ativa");
+
+    const falasAbertura = [
+        "...",
+        "Onde eu estou?",
+        "Não consigo me lembrar de nada...",
+        "Preciso descobrir o que aconteceu aqui."
+    ];
+
+    let falaAtual = 0;
+
+    function mostrarFalaAbertura() {
+        falaAbertura.classList.remove("fala-trocando");
+        void falaAbertura.offsetWidth;
+        falaAbertura.classList.add("fala-trocando");
+        falaAbertura.textContent = falasAbertura[falaAtual];
+    }
+
+    mostrarFalaAbertura();
+
+    const intervaloAbertura = setInterval(function () {
+        falaAtual++;
+        if (falaAtual >= falasAbertura.length) {
+            clearInterval(intervaloAbertura);
+            setTimeout(function () {
+                abertura.classList.add("encerrada");
+                document.body.classList.remove("intro-ativa");
+            }, 1400);
+            return;
+        }
+        mostrarFalaAbertura();
+    }, 2800);
+    
     /* =========================
-    DIÁLOGOS INICIAIS
+    DIÁLOGOS DA FASE
     ========================= */
     
     const falas = [

@@ -23,6 +23,99 @@ body{
     overflow-x:hidden;
 }
 
+body.intro-ativa{
+    background:#000;
+}
+
+body.intro-ativa .container{
+    opacity:0;
+    pointer-events:none;
+}
+
+.abertura{
+    position:fixed;
+    inset:0;
+    z-index:20;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:38px;
+    padding:30px;
+    background:#000;
+    opacity:1;
+    transition:opacity 1.8s ease;
+}
+
+.abertura.encerrada{
+    opacity:0;
+    pointer-events:none;
+}
+
+.abertura__zero{
+    opacity:0;
+    transform:translateY(18px) scale(.94);
+    animation:zeroDespertar 2.8s ease forwards;
+}
+
+.abertura__zero img{
+    display:block;
+    width:min(220px, 32vw);
+    filter:drop-shadow(0 0 12px #00ff88);
+}
+
+.abertura__balao{
+    position:relative;
+    width:min(510px, 76vw);
+    min-height:88px;
+    display:flex;
+    align-items:center;
+    padding:22px 26px;
+    color:#d8ffe9;
+    background:#07110d;
+    border:2px solid #00ff88;
+    border-radius:14px;
+    box-shadow:0 0 24px rgba(0,255,136,.3), inset 0 0 18px rgba(0,255,136,.08);
+    opacity:0;
+    animation:balaoAparece 1.5s 1.2s ease forwards;
+}
+
+.abertura__balao::before{
+    content:"";
+    position:absolute;
+    left:-14px;
+    top:38px;
+    width:24px;
+    height:24px;
+    background:#07110d;
+    border-left:2px solid #00ff88;
+    border-bottom:2px solid #00ff88;
+    transform:rotate(45deg);
+}
+
+.abertura__balao p{
+    margin:0;
+    min-height:1.5em;
+    font-size:clamp(.9rem, 2vw, 1.25rem);
+    line-height:1.7;
+}
+
+@keyframes zeroDespertar{
+    0%{opacity:0; transform:translateY(18px) scale(.94); filter:brightness(0)}
+    65%{opacity:1; filter:brightness(.65)}
+    100%{opacity:1; transform:translateY(0) scale(1); filter:brightness(1)}
+}
+
+@keyframes balaoAparece{
+    from{opacity:0; transform:translateY(12px)}
+    to{opacity:1; transform:translateY(0)}
+}
+
+@media (max-width:700px){
+    .abertura{flex-direction:column; gap:20px;}
+    .abertura__zero img{width:150px;}
+    .abertura__balao::before{left:calc(50% - 12px); top:-14px; transform:rotate(135deg);}
+}
+
 /* scanline estilo terminal */
 
 body::after{
