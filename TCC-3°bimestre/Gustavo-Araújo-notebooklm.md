@@ -1,6 +1,7 @@
 Atividade – NotebookLM
 
 Gabriel David Milan
+Gustavo Araújo
 
 Questão 1 – Conceito
 
