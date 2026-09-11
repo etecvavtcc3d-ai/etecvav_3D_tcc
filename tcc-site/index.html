@@ -32,6 +32,40 @@
   color: #d4ff8f;
   border: 1px solid #00ff88;
 }
+.modal-content h2 {
+  margin-bottom: 14px;
+}
+.modal-content label {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.75rem;
+}
+.resume-content {
+  text-align: center;
+}
+.resume-content p {
+  line-height: 1.7;
+  margin: 10px auto 18px;
+}
+.resume-phase {
+  display: block;
+  margin: 18px 0;
+  color: #fff;
+  font-size: 1.6rem;
+  text-shadow: 0 0 12px #00ff88;
+}
+.resume-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.resume-buttons button {
+  flex: 1 1 150px;
+}
+.secondary {
+  background: #18242b;
+  color: #d4ff8f;
+}
 .modal-buttons {
   display: flex;
   gap: 10px;
@@ -154,6 +188,19 @@
   </div>
 </div>
 
+<div id="resumeModal" class="modal hidden">
+  <div class="modal-content resume-content">
+    <h2>Progresso encontrado</h2>
+    <p>Você já jogou com este usuário. Deseja continuar de onde parou?</p>
+    <strong id="resumePhase" class="resume-phase">Fase 1</strong>
+    <div class="resume-buttons">
+      <button id="continueSavedBtn" class="accent">Continuar</button>
+      <button id="newGameBtn" class="secondary">Começar de novo</button>
+    </div>
+    <button id="closeResumeBtn" class="close-modal">Agora não</button>
+  </div>
+</div>
+
 <script src="js/save.js"></script>
 <script>
 /* ===============================
@@ -251,6 +298,11 @@ const loginUserInput = document.getElementById("loginUser");
 const loginPass = document.getElementById("loginPass");
 const loginFeedback = document.getElementById("loginFeedback");
 const changeUserBtn = document.getElementById("changeUserBtn");
+const resumeModal = document.getElementById("resumeModal");
+const resumePhase = document.getElementById("resumePhase");
+const continueSavedBtn = document.getElementById("continueSavedBtn");
+const newGameBtn = document.getElementById("newGameBtn");
+const closeResumeBtn = document.getElementById("closeResumeBtn");
 let pendingAction = null;
 
 function renderUserState() {
@@ -280,6 +332,20 @@ function closeLoginModal() {
     loginModal.classList.add("hidden");
 }
 
+function openResumePanel(fase) {
+  const faseValida = Math.max(1, Math.min(10, Number.parseInt(fase, 10) || 1));
+  resumePhase.textContent = `Fase ${faseValida}`;
+  resumeModal.classList.remove("hidden");
+}
+
+function closeResumePanel() {
+  resumeModal.classList.add("hidden");
+}
+
+function goToLobby() {
+  window.location.href = "lobby.html";
+}
+
 loginBtn.addEventListener("click", () => showLoginModal(null));
 userInfo.addEventListener("click", () => {
     if (SaveSystem.getCurrentUser()) {
@@ -294,6 +360,19 @@ changeUserBtn.addEventListener("click", () => {
 
 btnCloseModal.addEventListener("click", closeLoginModal);
 
+continueSavedBtn.addEventListener("click", () => {
+  closeResumePanel();
+  goToLobby();
+});
+
+newGameBtn.addEventListener("click", async () => {
+  closeResumePanel();
+  await SaveSystem.resetActiveSave();
+  goToLobby();
+});
+
+closeResumeBtn.addEventListener("click", closeResumePanel);
+
 btnLogin.addEventListener("click", async () => {
     const result = await SaveSystem.loginUser(loginUserInput.value, loginPass.value);
     if (!result.success) {
@@ -304,19 +383,16 @@ btnLogin.addEventListener("click", async () => {
     closeLoginModal();
     const action = pendingAction;
     pendingAction = null;
-    if (action === "start" || action === "switch") {
+    if (action === "start") {
         SaveSystem.resetActiveSave();
-        window.location.href = "lobby.html";
+      goToLobby();
         return;
     }
-    if (action === "continue") {
-        const fase = await SaveSystem.getActivePhase();
-        window.location.href = "lobby.html";
+    if (action === "switch" || action === "continue" || !action) {
+      const fase = (result.data && result.data.faseAtual) || await SaveSystem.getActivePhase();
+      openResumePanel(fase);
         return;
     }
-    const fase = (result.data && result.data.faseAtual) ? result.data.faseAtual : await SaveSystem.getActivePhase();
-    await SaveSystem.updateActivePhase(fase);
-    window.location.href = "lobby.html";
 });
 
 btnRegister.addEventListener("click", async () => {
@@ -327,8 +403,8 @@ btnRegister.addEventListener("click", async () => {
     }
     renderUserState();
     closeLoginModal();
-    SaveSystem.resetActiveSave();
-    window.location.href = "lobby.html";
+    await SaveSystem.resetActiveSave();
+    goToLobby();
 });
 
 // 🔴 INICIAR MISSÃO = NOVO JOGO (SEMPRE FASE 1)
@@ -341,13 +417,13 @@ document.getElementById("startBtn").addEventListener("click", async () => {
     window.location.href = "lobby.html";
 });
 
-// 🟢 CONTINUAR = TAMBÉM VAI PARA FASE 1 (SEMPRE COMEÇAR DO INÍCIO)
+// CONTINUAR mostra a fase salva antes de entrar no lobby.
 document.getElementById("continueBtn").addEventListener("click", async () => {
     if (!SaveSystem.getCurrentUser()) {
         showLoginModal("continue");
         return;
     }
-    window.location.href = "lobby.html";
+  openResumePanel(await SaveSystem.getActivePhase());
 });
 
 /* ===============================

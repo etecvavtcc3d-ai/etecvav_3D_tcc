@@ -69,6 +69,12 @@ async function registerUser(username, password) {
   username = (username || "").trim();
   password = (password || "").trim();
   if (!username || !password) return { success: false, message: "Digite usuário e senha." };
+  if (!/^[a-zA-Z0-9_.-]{3,20}$/.test(username)) {
+    return { success: false, message: "O usuário deve ter de 3 a 20 caracteres: letras, números, ponto, hífen ou sublinhado." };
+  }
+  if (password.length < 6) {
+    return { success: false, message: "A senha deve ter pelo menos 6 caracteres." };
+  }
 
   // Tenta API
   const res = await tryFetch('/api/register', {
