@@ -1,4 +1,12 @@
 const express = require('express');
+/*
+DECLARAÇÃO DE USO DE INTELIGÊNCIA ARTIFICIAL
+
+Ferramenta: Claude e GitHub Copilot (VS Code)
+Etapa: Desenvolvimento
+Finalidade: Auxílio na implementação do sistema de login e do salvamento de progresso.
+Validação: Código analisado, ajustado e testado pelos integrantes.
+*/
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
